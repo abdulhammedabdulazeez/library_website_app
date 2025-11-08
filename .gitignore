@@ -5,3 +5,7 @@
 tags
 node_modules
 __pycache__
+
+library_website_app/public/library
+library_website_app/public/node_modules
+library_website_app/www/library.html
