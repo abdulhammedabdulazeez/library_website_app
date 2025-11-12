@@ -1,7 +1,9 @@
-export const BookOfficeHours = () => {
-  const appointmentUrl =
-    "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3CMLgDECh21NpasAuQLdP4dmNNKtQESzJz8nfd7ILMXpFFRecBxhKb8Nej1DDTRC-DTcY9VWXk";
-
+interface BookOfficeHoursProps {
+  allowedDescription: boolean;
+  appointmentUrl: string;
+}
+// export const BookOfficeHours = () => {
+export const BookOfficeHours = ({ allowedDescription, appointmentUrl }: BookOfficeHoursProps) => {
   return (
     <div>
       <div className="mb-8">
@@ -9,10 +11,12 @@ export const BookOfficeHours = () => {
         <h2 className="mb-3 text-3xl font-light tracking-wide text-gray-900">
           Book <span className="text-[#891326]">Office Hours</span> Here
         </h2>
-        <p className="text-sm font-light tracking-wide text-gray-600 mb-6">
+        {allowedDescription && (
+          <p className="text-sm font-light tracking-wide text-gray-600 mb-6">
           Schedule a consultation with our library staff for research
-          assistance, resource guidance, or any questions you may have.
-        </p>
+            assistance, resource guidance, or any questions you may have.
+          </p>
+        )}
       </div>
 
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">

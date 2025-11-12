@@ -2251,6 +2251,11 @@ queue-microtask@^1.2.2:
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+react-chatbotify@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/react-chatbotify/-/react-chatbotify-2.4.1.tgz#0924b080ed77a40442b4c946c7b91cb39914f345"
+  integrity sha512-0uBUSm53VvIN8s74gDbK1mcgE1kHF3scib60RTdeybEw+wRlCDLlvhh/QdXwKJXLOuFVhbrCqonasJuwEbbu3A==
+
 react-dom@^19.1.1:
   version "19.1.1"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.1.1.tgz"

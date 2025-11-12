@@ -51,7 +51,7 @@ export const Hero = ({
 
   return (
     <section
-      className={`relative ${heightClass} before:absolute before:inset-0 before:bg-black/${overlayOpacity} before:opacity-${overlayOpacity} before:z-0`}
+      className={`relative ${heightClass} before:absolute before:inset-0 before:bg-black/80 before:z-0`}
     >
       {/* Background image */}
       <div

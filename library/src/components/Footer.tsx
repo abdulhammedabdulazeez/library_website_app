@@ -1,68 +1,59 @@
-import { MapPin, Phone, Mail, ExternalLink } from "lucide-react";
-
 export const Footer = () => {
   return (
-    <footer className="bg-[#1e3a8a] text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center space-y-4">
-          {/* Main title */}
-          <h3 className="text-xl font-semibold">ALU Rwanda Campus</h3>
-
-          {/* Address */}
-          <div className="flex items-center justify-center space-x-2 text-sm">
-            <MapPin className="h-4 w-4 flex-shrink-0" />
-            <span className="text-center">
-              Bumbogo, Kigali Innovation City, Next to Azam, Kigali, Rwanda
-            </span>
+    <footer className="bg-[#052D73] text-white">
+      <div className="mx-auto flex max-w-7xl flex-col items-center px-4 py-10 sm:px-6 lg:px-8">
+        <div className="flex w-full flex-col items-center gap-8 md:flex-row md:items-center md:justify-between md:gap-12">
+          <div className="flex w-full flex-col items-center gap-4 md:w-auto md:items-start">
+            <img
+              src="/alu-logo.png"
+              alt="African Leadership University logo"
+              className="h-12 w-auto"
+              loading="lazy"
+            />
           </div>
 
-          {/* Contact information */}
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 text-sm">
-            {/* Phone */}
+          <div
+            className="hidden h-16 w-px bg-white/30 md:block"
+            aria-hidden="true"
+          />
+
+          <div className="flex w-full flex-col items-center gap-2 text-center text-sm md:w-auto md:items-start md:text-left">
+            <span className="uppercase tracking-wider text-white/80">
+              ALU Rwanda Campus
+            </span>
+            <p className="max-w-xs leading-relaxed text-white/90">
+              Bumbogo, Kigali Innovation City,
+              <br />
+              Next to Azam, Kigali, Rwanda
+            </p>
+          </div>
+
+          <div
+            className="hidden h-16 w-px bg-white/30 md:block"
+            aria-hidden="true"
+          />
+
+          <div className="flex w-full flex-col items-center gap-2 text-center text-sm md:w-auto md:items-end md:text-right">
             <a
               href="tel:+250784650219"
-              className="flex items-center space-x-1 hover:text-gray-200 transition-colors duration-200 underline decoration-1 underline-offset-2"
+              className="font-medium text-white transition-colors duration-200 hover:text-white/80"
             >
-              <Phone className="h-4 w-4" />
-              <span>+250 784 650 219</span>
+              +250 784 650 219
             </a>
-
-            {/* Separator */}
-            <span className="hidden sm:inline text-gray-300">|</span>
-
-            {/* Email */}
             <a
               href="mailto:library_rw@comms.alueducation.com"
-              className="flex items-center space-x-1 hover:text-gray-200 transition-colors duration-200 underline decoration-1 underline-offset-2"
+              className="font-medium text-white transition-colors duration-200 hover:text-white/80"
             >
-              <Mail className="h-4 w-4" />
-              <span>library_rw@comms.alueducation.com</span>
-            </a>
-
-            {/* Separator */}
-            <span className="hidden sm:inline text-gray-300">|</span>
-
-            {/* ALU Rwanda link */}
-            <a
-              href="https://alueducation.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-1 hover:text-gray-200 transition-colors duration-200"
-            >
-              <span>[ALU Rwanda]</span>
-              <ExternalLink className="h-3 w-3" />
+              library_rw@comms.alueducation.com
             </a>
           </div>
         </div>
 
-        {/* Bottom border */}
-        <div className="mt-6 pt-6 border-t border-blue-800">
-          <div className="text-center text-xs text-gray-300">
-            <p>
-              © {new Date().getFullYear()} African Leadership University. All
-              rights reserved.
-            </p>
-          </div>
+        <div className="mt-8 flex w-full flex-col items-center gap-4 border-t border-white/10 pt-6 text-xs text-white/60 md:mt-10">
+          <p>
+            © {new Date().getFullYear()} African Leadership University. All
+            rights reserved.
+          </p>
         </div>
       </div>
     </footer>

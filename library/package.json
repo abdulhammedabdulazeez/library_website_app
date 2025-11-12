@@ -21,6 +21,7 @@
     "frappe-react-sdk": "^1.12.0",
     "lucide-react": "^0.545.0",
     "react": "^19.1.1",
+    "react-chatbotify": "^2.4.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.64.0",
     "react-photo-album": "^3.2.1",

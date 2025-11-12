@@ -43,17 +43,17 @@ export const ResearchSupportPage = () => {
           <ResourceCard
             logo="/assets/library_website_app/library/resources-images/ebsco_host.png"
             title="EBSCOHost"
-            link="https://search.ebscohost.com/"
+            link="https://research.ebsco.com/c/e3zs3u?auth-callid=a11b727a-70b0-9c27-9039-e89288de282b&db=a9h%2Cbth%2Ciih%2Ce000xww%2Ce020mww%2Cnlebk%2Ceue%2Cent%2Ceric%2Cpwh%2Cbwh"
           />
           <ResourceCard
             logo="/assets/library_website_app/library/resources-images/buku.png"
             title="BUKU"
-            link="https://buku.com/"
+            link="https://buku.app/"
           />
           <ResourceCard
             logo="/assets/library_website_app/library/resources-images/librarika.png"
             title="LIBRARIKA"
-            link="https://librarika.com/"
+            link="https://alu.librarika.com/"
           />
         </div>
       </section>
@@ -116,7 +116,8 @@ export const ResearchSupportPage = () => {
             title="Library Overview"
             description="To learn more about our library, kindly see our orientation slide deck."
             actionText="Learn More"
-            actionLink="/library-orientation"
+            actionLink="https://docs.google.com/presentation/d/1n27UYetXcLbIHTmAEECYjPhCik0OHPLs/edit?usp=sharing&ouid=113156932415250844659&rtpof=true&sd=true"
+            isExternal={true}
           />
 
           <SupportTipCard
@@ -124,7 +125,8 @@ export const ResearchSupportPage = () => {
             title="EBSCOHost Database"
             description="To learn how to use EBSCOHost (unlimited resource database), see the EBSCOHost User Guide."
             actionText="View Guide"
-            actionLink="https://search.ebscohost.com/help"
+            actionLink="https://docs.google.com/presentation/d/1hCbQ6UZka36wJLQq9vOkSJ2cNy_wjXn2VSz0f-8y34I/edit?usp=sharing"
+            isExternal={true}
           />
 
           <SupportTipCard
@@ -132,7 +134,8 @@ export const ResearchSupportPage = () => {
             title="BUKU eBooks"
             description="To learn how to use BUKU (ebooks), kindly refer to our BUKU User Guide."
             actionText="Learn More"
-            actionLink="/buku-guide"
+            actionLink="https://docs.google.com/presentation/d/1uF0j7q-sSJ4NKjKOs6LrXd28N42MJaIbxdrXz39MG3Q/edit?usp=sharing"
+            isExternal={true}
           />
 
           <SupportTipCard
@@ -140,7 +143,8 @@ export const ResearchSupportPage = () => {
             title="Librarika (Borrowing Books)"
             description="If you encounter issues registering or using Librarika (borrowing books from the library), kindly refer to our Librarika User Guide."
             actionText="View Guide"
-            actionLink="/librarika-guide"
+            actionLink="https://docs.google.com/presentation/d/15itke_OwI32WwRqVhrqZiXRow23lFF8AQVabuHfTBgg/edit?usp=sharing"
+            isExternal={true}
           />
 
           <SupportTipCard
@@ -148,7 +152,8 @@ export const ResearchSupportPage = () => {
             title="Canvas LMS Bookmark"
             description="To bookmark the library resources on your Canvas LMS."
             actionText="Bookmark Now"
-            actionLink="/canvas-bookmark"
+            actionLink="https://alueducation.instructure.com/courses/402/modules/items/27428"
+            isExternal={true}
           />
 
           <SupportTipCard
@@ -158,20 +163,26 @@ export const ResearchSupportPage = () => {
               <>
                 If you need research support, kindly book a research office hour{" "}
                 <a
-                  href="/book-office-hours"
+                  href="https://calendar.app.google/eM9eerMzpA83Zgd56"
+                  target="_blank"
                   className="underline font-semibold"
                 >
                   HERE
                 </a>
                 , and remember to fill out the{" "}
-                <a href="/research-form" className="underline font-semibold">
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdxQpdMUFppDCSWq8e0eT8x2XTiP3Xsyx8Q1C_YmA4gkKqH6g/viewform?usp=sf_link"
+                  target="_blank"
+                  className="underline font-semibold"
+                >
                   RESEARCH OFFICE HOURS FORM
                 </a>{" "}
                 when booking a session.
               </>
             }
             actionText="Request Support"
-            actionLink="/book-office-hours"
+            actionLink="https://calendar.app.google/eM9eerMzpA83Zgd56"
+            isExternal={true}
           />
 
           <SupportTipCard
@@ -180,14 +191,19 @@ export const ResearchSupportPage = () => {
             description={
               <>
                 For general library services support, kindly fill out this{" "}
-                <a href="/support-form" className="underline font-semibold">
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSd9Ij7VSGGxmo9kihcv8u-Or6LTCoUDippMPB9Arxufh03S0A/viewform?usp=sf_link"
+                  target="_blank"
+                  className="underline font-semibold"
+                >
                   FORM
                 </a>{" "}
                 and a librarian will get in touch with you as soon as possible.
               </>
             }
             actionText="Get Support"
-            actionLink="/support-form"
+            actionLink="https://docs.google.com/forms/d/e/1FAIpQLSd9Ij7VSGGxmo9kihcv8u-Or6LTCoUDippMPB9Arxufh03S0A/viewform?usp=sf_link"
+            isExternal={true}
           />
 
           <SupportTipCard

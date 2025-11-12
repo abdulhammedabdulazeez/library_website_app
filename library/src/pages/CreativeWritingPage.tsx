@@ -12,14 +12,14 @@ export const CreativeWritingPage = () => {
         buttons={[
           {
             label: "Grammarly",
-            link: "/request-support",
+            link: "https://app.grammarly.com/",
             variant: "default",
             isExternal: true,
             className: "bg-[#891326] text-white hover:bg-[#6d0f1e]",
           },
           {
             label: "Turnitin",
-            link: "/request-support",
+            link: "https://www.turnitin.com/",
             variant: "default",
             isExternal: true,
             className: "border-[#891326] hover:bg-[#891326] hover:text-white",
@@ -78,7 +78,8 @@ export const CreativeWritingPage = () => {
               </a>{" "}
               or{" "}
               <a
-                href="/grammarly-info"
+                href="https://docs.google.com/presentation/d/1EbzTayL6_0zgJNEPqeygRvT1yFPQ781A/edit?usp=sharing&ouid=113156932415250844659&rtpof=true&sd=true"
+                target="_blank"
                 className="underline hover:text-gray-200"
               >
                 click this link
