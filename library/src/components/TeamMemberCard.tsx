@@ -16,18 +16,18 @@ interface TeamMemberCardProps {
 export const TeamMemberCard = ({ member }: TeamMemberCardProps) => {
   return (
     <Dialog>
-      <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+      <div className="mx-auto flex h-full max-w-sm flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg sm:max-w-full">
         {/* Team Member Image */}
         <div className="aspect-square overflow-hidden">
           <img
             src={member.image}
             alt={member.name}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
         </div>
 
         {/* Card Content */}
-        <div className="p-6">
+        <div className="flex flex-1 flex-col p-6">
           {/* Name */}
           <h3 className="text-xl font-bold text-gray-900 mb-1">
             {member.name}
@@ -37,7 +37,7 @@ export const TeamMemberCard = ({ member }: TeamMemberCardProps) => {
           <p className="text-sm text-gray-600 mb-3">{member.role}</p>
 
           {/* Short Bio */}
-          <p className="text-sm text-gray-700 font-light leading-relaxed mb-4">
+          <p className="mb-4 text-sm font-light leading-relaxed text-gray-700">
             {member.shortBio}
           </p>
 

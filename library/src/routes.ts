@@ -7,6 +7,7 @@ import { ResearchSupportPage } from "./pages/ResearchSupportPage";
 import { Events } from "./pages/Events";
 import { GcgoDetailPage } from "./pages/GcgoDetailPage";
 import { Gcgo } from "./pages/Gcgo";
+import { ResearchOutputs } from "./pages/ResearchOutputs";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
           { index: true, Component: Gcgo },
           { path: ":slug", Component: GcgoDetailPage },
         ],
+      },
+      {
+        path: "research-outputs",
+        Component: ResearchOutputs,
       },
     ],
   },

@@ -35,28 +35,32 @@ export const FAQ = () => {
   ];
 
   return (
-    <div className="flex gap-30 items-start">
+    <div className="flex flex-col items-start gap-10 rounded-3xl bg-white px-6 py-8 shadow-sm sm:px-8 lg:flex-row lg:items-stretch lg:gap-16 lg:px-12">
       {/* Left Section - Header */}
-      <div className="w-1/3 mx-auto">
-        <hr className="border-2 border-[#D00D2D] w-24 mb-4" />
-        <h2 className="mb-3 text-3xl font-light tracking-wide text-gray-900">
+      <div className="w-full lg:w-1/3">
+        <hr className="mb-4 w-20 border-2 border-[#D00D2D] sm:w-24" />
+        <h2 className="mb-3 text-2xl font-semibold tracking-wide text-gray-900 sm:text-3xl">
           Frequently <span className="text-[#891326]">Asked</span> Questions
         </h2>
-        <p className="text-sm font-light tracking-wide text-gray-600">
+        <p className="text-sm font-light leading-relaxed tracking-wide text-gray-600 sm:text-base">
           Find answers to common questions about our library services and
           resources.
         </p>
       </div>
 
       {/* Right Section - Accordion */}
-      <div className="w-2/3 mx-auto">
-        <Accordion type="multiple" className="w-full">
+      <div className="w-full lg:w-2/3">
+        <Accordion type="multiple" className="w-full space-y-3">
           {faqItems.map((item, index) => (
-            <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="text-left text-base font-semibold text-gray-900">
+            <AccordionItem
+              key={index}
+              value={`item-${index}`}
+              className="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm transition-shadow hover:shadow-md"
+            >
+              <AccordionTrigger className="text-left text-base font-semibold text-gray-900 sm:text-lg">
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className="text-sm font-light text-gray-700">
+              <AccordionContent className="text-sm font-light leading-relaxed text-gray-700 sm:text-base">
                 {item.answer}
               </AccordionContent>
             </AccordionItem>

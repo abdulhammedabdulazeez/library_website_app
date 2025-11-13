@@ -85,6 +85,12 @@ const navItems: NavItem[] = [
       },
     ],
   },
+  {
+    id: "research",
+    label: "Research Outputs",
+    to: "/library/research-outputs",
+    type: "link",
+  },
 ];
 
 const highlightClass = "text-[#D00D2D]";

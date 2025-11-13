@@ -25,7 +25,7 @@ export const Hero = ({
   title,
   description,
   buttons = [],
-  overlayOpacity = 80,
+  // overlayOpacity = 80,
   textAlign = "left",
   height = "full",
   customHeight,

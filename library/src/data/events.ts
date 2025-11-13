@@ -4,6 +4,36 @@ const EVENT_IMAGE = "/assets/library_website_app/library/event-flyer-1.png";
 
 export const UPCOMING_EVENTS: LibraryEvent[] = [
   {
+    id: "academic-research-integrity-3",
+    title: "Academic Research Integrity Workshop 3.0",
+    date: "Tuesday, December 2, 2025",
+    time: "3:00 – 4:30 pm CAT",
+    location: "Google Meet",
+    description:
+      "Join us for an essential workshop that equips you with the knowledge and skills to uphold the highest standards of academic integrity. Learn about ressearch publication writing, AI in education, and capstone research and ethics guidelines.",
+    image: "/assets/library_website_app/library/Academic Research Integrity Workshop 3.0.png",
+    registrationUrl:
+      "https://docs.google.com/forms/d/e/1FAIpQLSd_YAClPTDOy-W6FUzrRX_HN6yAsZaX147oxMPJmwHj2eugXA/viewform",
+    speakers: [
+      {
+        name: "Emmanuel Ekosse",
+        title: "Chair, ALU Research & Ethics Committee",
+      },
+      {
+        name: "SUE SNYMAN",
+        title: "Director of Research, ALU School of Wildlife Conservation",
+      },
+      {
+        name: "Dr. Francois Sarah",
+        title: "Programme Manager, ALCHE",
+      },
+      {
+        name: "Frank Onuh",
+        title: "Doctoral Researcher, University of Lethbridge, Canada",
+      },
+    ],
+  },
+  {
     id: "academic-research-integrity-2",
     title: "Academic Research Integrity Workshop 2.0",
     date: "Tuesday, March 19, 2024",

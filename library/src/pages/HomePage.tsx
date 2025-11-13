@@ -33,13 +33,13 @@ export const HomePage = () => {
 
       <LibraryChatBot />
 
-      <section className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 my-20">
-        <div className="w-[62%] mx-auto">
-          <p className="text-2xl text-center tracking-wider">
+      <section className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-3xl flex-col gap-4 text-center">
+          <p className="text-xl font-light tracking-wide text-gray-900 sm:text-2xl">
             As a leader in education on the continent, the{" "}
             <span className="text-[#891326]">African</span>
           </p>
-          <p className="text-2xl text-center tracking-wider">
+          <p className="text-xl font-light tracking-wide text-gray-900 sm:text-2xl">
             <span className="text-[#891326]">Leadership University</span>{" "}
             Library is primarily digital, especially for our students in Rwanda.
           </p>
@@ -47,8 +47,8 @@ export const HomePage = () => {
       </section>
 
       <section className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="bg-[#CEF1FF] p-10 flex items-center justify-between rounded-3xl">
-          <div className="w-1/4 mx-auto">
+        <div className="bg-[#CEF1FF] p-10 flex flex-col md:flex-row items-center justify-between rounded-3xl">
+          <div className="w-full mb-4 md:mb-0 md:w-1/4 mx-auto">
             <p className="text-sm font-light tracking-wide">
               We currently have subscriptions to several electronic information
               sources, including databases that provide access to over 263,300
@@ -73,7 +73,7 @@ export const HomePage = () => {
       </section>
 
       <section className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="w-2/3 mx-auto">
+        <div className="w-full md:w-2/3 mx-auto">
           <HomePageSlide />
         </div>
       </section>
