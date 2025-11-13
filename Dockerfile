@@ -1,0 +1,60 @@
+# syntax=docker/dockerfile:1.6
+
+ARG FRAPPE_BRANCH=version-15
+
+FROM node:20-bullseye-slim AS frontend-builder
+
+WORKDIR /workspace
+
+COPY . .
+
+WORKDIR /workspace/library
+
+RUN npm ci \
+    && npm run build
+
+# -----------------------------------------------------------------------------
+
+FROM frappe/bench:${FRAPPE_BRANCH} AS backend
+
+ENV BENCH_PATH=/home/frappe/library-bench
+
+USER root
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        mariadb-client \
+        redis-tools \
+        curl \
+        tini \
+    && rm -rf /var/lib/apt/lists/*
+
+USER frappe
+
+RUN bench init \
+      --frappe-branch ${FRAPPE_BRANCH} \
+      --skip-redis-config-generation \
+      --python python3 \
+      library-bench
+
+WORKDIR ${BENCH_PATH}
+
+RUN rm -rf sites/site1.local \
+    && rm -f sites/currentsite.txt \
+    && rm -f sites/common_site_config.json
+
+COPY --from=frontend-builder --chown=frappe:frappe /workspace/library_website_app ./apps/library_website_app
+
+RUN bench setup requirements --python \
+    && bench setup requirements --node \
+    && bench build --app library_website_app
+
+COPY --chown=frappe:frappe docker-entrypoint.sh /home/frappe/docker-entrypoint.sh
+RUN chmod +x /home/frappe/docker-entrypoint.sh
+
+ENV PATH="${BENCH_PATH}/env/bin:${PATH}"
+
+WORKDIR ${BENCH_PATH}
+
+ENTRYPOINT ["tini", "--", "/home/frappe/docker-entrypoint.sh"]
+CMD ["web"]
+

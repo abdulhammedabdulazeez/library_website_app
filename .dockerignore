@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env*
+*.log
+__pycache__/
+*.py[cod]
+node_modules/
+library/node_modules/
+library/dist/
+library/.vite/
+library/.eslintcache
+library/yarn.lock
+tests/
+
