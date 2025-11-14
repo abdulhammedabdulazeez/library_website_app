@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.6
 
 ARG FRAPPE_BRANCH=version-15
-ARG FRAPPE_BENCH_IMAGE=stable
+ARG FRAPPE_BENCH_IMAGE=v5.19.0
 
 FROM node:20-bullseye-slim AS frontend-builder
 
