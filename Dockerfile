@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1.6
 
 ARG FRAPPE_BRANCH=version-15
+ARG FRAPPE_BENCH_IMAGE=stable
 
 FROM node:20-bullseye-slim AS frontend-builder
 
@@ -15,7 +16,7 @@ RUN npm ci \
 
 # -----------------------------------------------------------------------------
 
-FROM frappe/bench:${FRAPPE_BRANCH} AS backend
+FROM frappe/bench:${FRAPPE_BENCH_IMAGE} AS backend
 
 ENV BENCH_PATH=/home/frappe/library-bench
 

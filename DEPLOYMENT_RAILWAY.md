@@ -44,10 +44,13 @@ Set these variables on the Railway service (values in parentheses show convenien
 | `REDIS_CACHE` | Redis URL for cache (`REDIS_URL`). |
 | `REDIS_QUEUE` | Redis URL for workers (`REDIS_URL`). |
 | `REDIS_SOCKETIO` | Redis URL for realtime (`REDIS_URL`). |
+| `FRAPPE_BENCH_IMAGE` *(optional)* | Docker tag for the base bench image (defaults to `stable`). |
 
 > Tip: you can omit `DB_*` and `REDIS_*` if you accept the defaults that reuse Railway’s own variables.
 
 Railway injects `PORT` automatically; do not override it.
+
+If you need a specific upstream bench release, set `FRAPPE_BENCH_IMAGE` to one of the tags listed on Docker Hub (e.g. `stable`, `v15.76.0`). The `FRAPPE_BRANCH` build arg remains `version-15`, so Frappe itself stays on v15 even when you change the base image tag.
 
 ## 4. First deployment flow
 
