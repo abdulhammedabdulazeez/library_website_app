@@ -52,7 +52,8 @@ RUN rm -rf sites/site1.local \
 COPY --from=frontend-builder --chown=frappe:frappe /workspace/library_website_app ./apps/library_website_app
 
 RUN bench setup requirements --python \
-    && bench setup requirements --node
+    && bench setup requirements --node \
+    && ${BENCH_PATH}/env/bin/pip install -e apps/library_website_app
 
 USER root
 
