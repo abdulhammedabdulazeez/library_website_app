@@ -135,28 +135,27 @@ shift || true
 
 case "${COMMAND}" in
   web)
-    exec "${BENCH_BIN}" serve \
+    exec "${BENCH_BIN}" --site "${SITE_NAME}" serve \
       --port "${PORT}" \
-      --site "${SITE_NAME}" \
       --noreload
     ;;
   socketio)
     exec node apps/frappe/socketio.js
     ;;
   schedule)
-    exec "${BENCH_BIN}" schedule
+    exec "${BENCH_BIN}" --site "${SITE_NAME}" schedule
     ;;
   worker-short)
-    exec "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue short
+    exec "${BENCH_BIN}" --site "${SITE_NAME}" worker --queue short
     ;;
   worker-default)
-    exec "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue default
+    exec "${BENCH_BIN}" --site "${SITE_NAME}" worker --queue default
     ;;
   worker-long)
-    exec "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue long
+    exec "${BENCH_BIN}" --site "${SITE_NAME}" worker --queue long
     ;;
   *)
-    exec "${COMMAND}" "$@"
+    exec "${BENCH_BIN}" --site "${SITE_NAME}" "$COMMAND" "$@"
     ;;
 esac
 
