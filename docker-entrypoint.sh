@@ -2,12 +2,17 @@
 set -euo pipefail
 
 : "${BENCH_PATH:=/home/frappe/library-bench}"
-cd "${BENCH_PATH}"
 
-if [[ -d "sites" ]]; then
-  echo "ℹ️ Ensuring ownership for sites directory"
-  chown -R frappe:frappe sites || true
+if [[ "$(id -u)" -eq 0 ]]; then
+  cd "${BENCH_PATH}"
+  if [[ -d "sites" ]]; then
+    echo "ℹ️ Ensuring ownership for sites directory"
+    chown -R frappe:frappe sites || true
+  fi
+  exec gosu frappe "$0" "$@"
 fi
+
+cd "${BENCH_PATH}"
 
 SITE_NAME="${SITE_NAME:-${FRAPPE_SITE_NAME_HEADER:-}}"
 if [[ -z "${SITE_NAME}" ]]; then

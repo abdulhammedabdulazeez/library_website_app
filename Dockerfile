@@ -27,6 +27,7 @@ RUN apt-get update \
         redis-server \
         mariadb-client \
         redis-tools \
+        gosu \
         curl \
         tini \
     && rm -rf /var/lib/apt/lists/*
