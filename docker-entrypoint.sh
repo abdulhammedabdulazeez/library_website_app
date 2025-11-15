@@ -2,7 +2,7 @@
 set -euo pipefail
 
 : "${BENCH_PATH:=/home/frappe/library-bench}"
-BENCH_BIN="${BENCH_PATH}/env/bin/bench"
+BENCH_BIN="$(which bench)"
 
 if [[ "$(id -u)" -eq 0 ]]; then
   cd "${BENCH_PATH}"
