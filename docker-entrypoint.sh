@@ -6,15 +6,6 @@ set -euo pipefail
 if [[ "$(id -u)" -eq 0 ]]; then
   cd "${BENCH_PATH}"
   mkdir -p sites
-  echo "ℹ️ Ensuring ownership for sites directory"
-  if chown -R frappe:frappe sites 2>/tmp/chown.log; then
-    rm -f /tmp/chown.log
-    exec gosu frappe "$0" "$@"
-  else
-    echo "⚠️ Could not change ownership of sites; continuing as root."
-    cat /tmp/chown.log || true
-    rm -f /tmp/chown.log
-  fi
 fi
 
 cd "${BENCH_PATH}"
@@ -123,28 +114,28 @@ shift || true
 
 case "${COMMAND}" in
   web)
-    exec bench serve \
+    exec gosu frappe bench serve \
       --port "${PORT}" \
       --site "${SITE_NAME}" \
       --noreload
     ;;
   socketio)
-    exec node apps/frappe/socketio.js
+    exec gosu frappe node apps/frappe/socketio.js
     ;;
   schedule)
-    exec bench schedule
+    exec gosu frappe bench schedule
     ;;
   worker-short)
-    exec bench worker --site "${SITE_NAME}" --queue short
+    exec gosu frappe bench worker --site "${SITE_NAME}" --queue short
     ;;
   worker-default)
-    exec bench worker --site "${SITE_NAME}" --queue default
+    exec gosu frappe bench worker --site "${SITE_NAME}" --queue default
     ;;
   worker-long)
-    exec bench worker --site "${SITE_NAME}" --queue long
+    exec gosu frappe bench worker --site "${SITE_NAME}" --queue long
     ;;
   *)
-    exec "${COMMAND}" "$@"
+    exec gosu frappe "${COMMAND}" "$@"
     ;;
 esac
 

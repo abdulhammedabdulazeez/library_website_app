@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/assets/library_website_app/library/ && yarn copy-html-entry",
+    "build": "vite build --base=/assets/library_website_app/library/ && npm run copy-html-entry",
     "lint": "eslint .",
     "preview": "vite preview",
-    "copy-html-entry": "cp ../library_website_app/public/library/index.html ../library_website_app/www/library.html"
+    "copy-html-entry": "shx cp ../library_website_app/public/library/index.html ../library_website_app/www/library.html"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
@@ -38,6 +38,7 @@
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.3",
+    "shx": "^0.3.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
