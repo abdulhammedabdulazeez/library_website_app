@@ -12,6 +12,7 @@ if [[ "$(id -u)" -eq 0 ]]; then
 fi
 
 cd "${BENCH_PATH}"
+export PYTHONPATH="${BENCH_PATH}/apps:${PYTHONPATH:-}"
 
 SITE_NAME="${SITE_NAME:-${FRAPPE_SITE_NAME_HEADER:-}}"
 if [[ -z "${SITE_NAME}" ]]; then
