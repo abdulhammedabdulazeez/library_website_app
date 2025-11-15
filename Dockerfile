@@ -3,16 +3,17 @@
 ARG FRAPPE_BRANCH=version-15
 ARG FRAPPE_BENCH_IMAGE=v5.19.0
 
-FROM node:20-bullseye-slim AS frontend-builder
-
-WORKDIR /workspace
-
-COPY . .
+FROM node:20-bullseye-slim AS frontend-deps
 
 WORKDIR /workspace/library
 
-RUN npm ci \
-    && npm run build
+COPY library/package.json library/package-lock.json ./
+RUN npm ci
+
+FROM frontend-deps AS frontend-builder
+
+COPY library/ .
+RUN npm run build
 
 # -----------------------------------------------------------------------------
 

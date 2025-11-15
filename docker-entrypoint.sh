@@ -5,11 +5,16 @@ set -euo pipefail
 
 if [[ "$(id -u)" -eq 0 ]]; then
   cd "${BENCH_PATH}"
-  if [[ -d "sites" ]]; then
-    echo "ℹ️ Ensuring ownership for sites directory"
-    chown -R frappe:frappe sites || true
+  mkdir -p sites
+  echo "ℹ️ Ensuring ownership for sites directory"
+  if chown -R frappe:frappe sites 2>/tmp/chown.log; then
+    rm -f /tmp/chown.log
+    exec gosu frappe "$0" "$@"
+  else
+    echo "⚠️ Could not change ownership of sites; continuing as root."
+    cat /tmp/chown.log || true
+    rm -f /tmp/chown.log
   fi
-  exec gosu frappe "$0" "$@"
 fi
 
 cd "${BENCH_PATH}"
@@ -53,6 +58,8 @@ if [[ -z "${REDIS_CACHE}" || -z "${REDIS_QUEUE}" || -z "${REDIS_SOCKETIO}" ]]; t
   exit 1
 fi
 
+mkdir -p sites
+
 echo "ℹ️ Using site: ${SITE_NAME}"
 echo "ℹ️ Database host: ${DB_HOST}:${DB_PORT}"
 echo "ℹ️ Redis cache: ${REDIS_CACHE}"
@@ -62,7 +69,9 @@ import json
 import os
 from pathlib import Path
 
-config_path = Path("sites/common_site_config.json")
+config_dir = Path("sites")
+config_dir.mkdir(parents=True, exist_ok=True)
+config_path = config_dir / "common_site_config.json"
 config = {
     "db_host": os.environ["DB_HOST"],
     "db_port": int(os.environ["DB_PORT"]),
