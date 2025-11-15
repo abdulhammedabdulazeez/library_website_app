@@ -4,6 +4,11 @@ set -euo pipefail
 : "${BENCH_PATH:=/home/frappe/library-bench}"
 cd "${BENCH_PATH}"
 
+if [[ -d "sites" ]]; then
+  echo "ℹ️ Ensuring ownership for sites directory"
+  chown -R frappe:frappe sites || true
+fi
+
 SITE_NAME="${SITE_NAME:-${FRAPPE_SITE_NAME_HEADER:-}}"
 if [[ -z "${SITE_NAME}" ]]; then
   echo "❌ SITE_NAME environment variable is required." >&2
