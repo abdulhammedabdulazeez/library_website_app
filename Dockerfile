@@ -17,6 +17,7 @@ RUN npm ci \
 # -----------------------------------------------------------------------------
 
 FROM frappe/bench:${FRAPPE_BENCH_IMAGE} AS backend
+ARG FRAPPE_BRANCH
 
 ENV BENCH_PATH=/home/frappe/library-bench
 
