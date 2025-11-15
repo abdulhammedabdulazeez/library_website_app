@@ -2,6 +2,7 @@
 set -euo pipefail
 
 : "${BENCH_PATH:=/home/frappe/library-bench}"
+BENCH_BIN="${BENCH_PATH}/env/bin/bench"
 
 if [[ "$(id -u)" -eq 0 ]]; then
   cd "${BENCH_PATH}"
@@ -83,7 +84,7 @@ PY
 
 if [[ ! -d "sites/${SITE_NAME}" ]]; then
   echo "➡️ Creating new site ${SITE_NAME}"
-  bench new-site "${SITE_NAME}" \
+  "${BENCH_BIN}" new-site "${SITE_NAME}" \
     --db-type mariadb \
     --db-host "${DB_HOST}" \
     --db-port "${DB_PORT}" \
@@ -99,22 +100,22 @@ else
   echo "✅ Site ${SITE_NAME} already exists."
 fi
 
-if ! bench --site "${SITE_NAME}" list-apps | grep -q "^library_website_app$"; then
+if ! "${BENCH_BIN}" --site "${SITE_NAME}" list-apps | grep -q "^library_website_app$"; then
   echo "➡️ Installing library_website_app on ${SITE_NAME}"
-  bench --site "${SITE_NAME}" install-app library_website_app
+  "${BENCH_BIN}" --site "${SITE_NAME}" install-app library_website_app
 fi
 
 echo "➡️ Running migrations for ${SITE_NAME}"
-bench --site "${SITE_NAME}" migrate
+"${BENCH_BIN}" --site "${SITE_NAME}" migrate
 
-bench use "${SITE_NAME}"
+"${BENCH_BIN}" use "${SITE_NAME}"
 
 COMMAND="${1:-web}"
 shift || true
 
 case "${COMMAND}" in
   web)
-    exec gosu frappe bench serve \
+    exec gosu frappe "${BENCH_BIN}" serve \
       --port "${PORT}" \
       --site "${SITE_NAME}" \
       --noreload
@@ -123,16 +124,16 @@ case "${COMMAND}" in
     exec gosu frappe node apps/frappe/socketio.js
     ;;
   schedule)
-    exec gosu frappe bench schedule
+    exec gosu frappe "${BENCH_BIN}" schedule
     ;;
   worker-short)
-    exec gosu frappe bench worker --site "${SITE_NAME}" --queue short
+    exec gosu frappe "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue short
     ;;
   worker-default)
-    exec gosu frappe bench worker --site "${SITE_NAME}" --queue default
+    exec gosu frappe "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue default
     ;;
   worker-long)
-    exec gosu frappe bench worker --site "${SITE_NAME}" --queue long
+    exec gosu frappe "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue long
     ;;
   *)
     exec gosu frappe "${COMMAND}" "$@"
