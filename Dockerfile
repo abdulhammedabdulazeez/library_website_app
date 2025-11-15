@@ -48,8 +48,7 @@ RUN rm -rf sites/site1.local \
 COPY --from=frontend-builder --chown=frappe:frappe /workspace/library_website_app ./apps/library_website_app
 
 RUN bench setup requirements --python \
-    && bench setup requirements --node \
-    && bench build --app library_website_app
+    && bench setup requirements --node
 
 COPY --chown=frappe:frappe docker-entrypoint.sh /home/frappe/docker-entrypoint.sh
 RUN chmod +x /home/frappe/docker-entrypoint.sh
