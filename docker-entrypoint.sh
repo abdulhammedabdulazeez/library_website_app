@@ -7,6 +7,8 @@ BENCH_BIN="$(which bench)"
 if [[ "$(id -u)" -eq 0 ]]; then
   cd "${BENCH_PATH}"
   mkdir -p sites
+  chmod -R 777 sites || true
+  exec gosu frappe "$0" "$@"
 fi
 
 cd "${BENCH_PATH}"
@@ -115,28 +117,28 @@ shift || true
 
 case "${COMMAND}" in
   web)
-    exec gosu frappe "${BENCH_BIN}" serve \
+    exec "${BENCH_BIN}" serve \
       --port "${PORT}" \
       --site "${SITE_NAME}" \
       --noreload
     ;;
   socketio)
-    exec gosu frappe node apps/frappe/socketio.js
+    exec node apps/frappe/socketio.js
     ;;
   schedule)
-    exec gosu frappe "${BENCH_BIN}" schedule
+    exec "${BENCH_BIN}" schedule
     ;;
   worker-short)
-    exec gosu frappe "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue short
+    exec "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue short
     ;;
   worker-default)
-    exec gosu frappe "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue default
+    exec "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue default
     ;;
   worker-long)
-    exec gosu frappe "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue long
+    exec "${BENCH_BIN}" worker --site "${SITE_NAME}" --queue long
     ;;
   *)
-    exec gosu frappe "${COMMAND}" "$@"
+    exec "${COMMAND}" "$@"
     ;;
 esac
 
