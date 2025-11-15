@@ -23,6 +23,7 @@ ENV BENCH_PATH=/home/frappe/library-bench
 USER root
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        redis-server \
         mariadb-client \
         redis-tools \
         curl \
