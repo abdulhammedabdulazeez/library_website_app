@@ -51,7 +51,9 @@ COPY --from=frontend-builder --chown=frappe:frappe /workspace/library_website_ap
 RUN bench setup requirements --python \
     && bench setup requirements --node
 
-COPY --chown=frappe:frappe docker-entrypoint.sh /home/frappe/docker-entrypoint.sh
+USER root
+
+COPY docker-entrypoint.sh /home/frappe/docker-entrypoint.sh
 RUN chmod +x /home/frappe/docker-entrypoint.sh
 
 ENV PATH="${BENCH_PATH}/env/bin:${PATH}"
