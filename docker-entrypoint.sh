@@ -58,7 +58,15 @@ mkdir -p sites
 if [[ ! -f sites/apps.txt ]]; then
   cat > sites/apps.txt <<'EOF'
 frappe
+rentals
+payments
+airplane_mode
+hrms
+frappe_types
+erpnext
+doppio
 library_website_app
+expense_tracker
 EOF
 fi
 
@@ -66,7 +74,15 @@ if [[ ! -f sites/apps.json ]]; then
   cat > sites/apps.json <<'EOF'
 [
   "frappe",
-  "library_website_app"
+  "rentals",
+  "payments",
+  "airplane_mode",
+  "hrms",
+  "frappe_types",
+  "erpnext",
+  "doppio",
+  "library_website_app",
+  "expense_tracker"
 ]
 EOF
 fi
