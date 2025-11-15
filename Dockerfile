@@ -50,7 +50,9 @@ COPY --from=frontend-builder --chown=frappe:frappe /workspace/library_website_ap
 
 RUN bench setup requirements --python \
     && bench setup requirements --node \
-    && bench build --apps frappe
+    && bench build --apps frappe \
+    && rm -rf /home/frappe/prebuilt-assets \
+    && cp -a sites/assets /home/frappe/prebuilt-assets
 
 USER root
 

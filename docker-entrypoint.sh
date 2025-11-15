@@ -59,6 +59,14 @@ fi
 
 mkdir -p sites
 
+# Restore prebuilt asset bundles if the mounted volume is empty
+if [[ ! -f sites/assets/bundles.json && -d /home/frappe/prebuilt-assets ]]; then
+  echo "ℹ️ Restoring prebuilt assets into sites/assets"
+  rm -rf sites/assets
+  mkdir -p sites/assets
+  cp -a /home/frappe/prebuilt-assets/. sites/assets/
+fi
+
 # Always ensure apps metadata lists the apps bundled in this image
 cat > sites/apps.txt <<'EOF'
 frappe
