@@ -54,6 +54,23 @@ fi
 
 mkdir -p sites
 
+# Bootstrap apps.txt and apps.json if they don't exist (needed for fresh Railway volumes)
+if [[ ! -f sites/apps.txt ]]; then
+  cat > sites/apps.txt <<'EOF'
+frappe
+library_website_app
+EOF
+fi
+
+if [[ ! -f sites/apps.json ]]; then
+  cat > sites/apps.json <<'EOF'
+[
+  "frappe",
+  "library_website_app"
+]
+EOF
+fi
+
 echo "ℹ️ Using site: ${SITE_NAME}"
 echo "ℹ️ Database host: ${DB_HOST}:${DB_PORT}"
 echo "ℹ️ Redis cache: ${REDIS_CACHE}"
