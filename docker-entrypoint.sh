@@ -54,37 +54,30 @@ fi
 
 mkdir -p sites
 
-# Bootstrap apps.txt and apps.json if they don't exist (needed for fresh Railway volumes)
+# Bootstrap apps metadata when the attached volume is empty
 if [[ ! -f sites/apps.txt ]]; then
-  cat > sites/apps.txt <<'EOF'
+  if [[ -f /home/frappe/apps.txt.template ]]; then
+    cp /home/frappe/apps.txt.template sites/apps.txt
+  else
+    echo "⚠️ apps.txt template missing; creating minimal file."
+    cat > sites/apps.txt <<'EOF'
 frappe
-rentals
-payments
-airplane_mode
-hrms
-frappe_types
-erpnext
-doppio
 library_website_app
-expense_tracker
 EOF
+  fi
 fi
 
 if [[ ! -f sites/apps.json ]]; then
-  cat > sites/apps.json <<'EOF'
+  if [[ -f /home/frappe/apps.json.template ]]; then
+    cp /home/frappe/apps.json.template sites/apps.json
+  else
+    cat > sites/apps.json <<'EOF'
 [
   "frappe",
-  "rentals",
-  "payments",
-  "airplane_mode",
-  "hrms",
-  "frappe_types",
-  "erpnext",
-  "doppio",
-  "library_website_app",
-  "expense_tracker"
+  "library_website_app"
 ]
 EOF
+  fi
 fi
 
 echo "ℹ️ Using site: ${SITE_NAME}"

@@ -40,6 +40,9 @@ RUN bench init \
       --python python3 \
       library-bench
 
+RUN cp ${BENCH_PATH}/sites/apps.txt /home/frappe/apps.txt.template \
+    && cp ${BENCH_PATH}/sites/apps.json /home/frappe/apps.json.template
+
 WORKDIR ${BENCH_PATH}
 
 RUN rm -rf sites/site1.local \
