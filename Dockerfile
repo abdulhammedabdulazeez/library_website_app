@@ -40,9 +40,6 @@ RUN bench init \
       --python python3 \
       library-bench
 
-RUN cp ${BENCH_PATH}/sites/apps.txt /home/frappe/apps.txt.template \
-    && cp ${BENCH_PATH}/sites/apps.json /home/frappe/apps.json.template
-
 WORKDIR ${BENCH_PATH}
 
 RUN rm -rf sites/site1.local \
@@ -52,8 +49,7 @@ RUN rm -rf sites/site1.local \
 COPY --from=frontend-builder --chown=frappe:frappe /workspace/library_website_app ./apps/library_website_app
 
 RUN bench setup requirements --python \
-    && bench setup requirements --node \
-    && ${BENCH_PATH}/env/bin/pip install -e apps/library_website_app
+    && bench setup requirements --node
 
 USER root
 

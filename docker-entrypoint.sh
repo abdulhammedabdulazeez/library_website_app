@@ -54,31 +54,18 @@ fi
 
 mkdir -p sites
 
-# Bootstrap apps metadata when the attached volume is empty
-if [[ ! -f sites/apps.txt ]]; then
-  if [[ -f /home/frappe/apps.txt.template ]]; then
-    cp /home/frappe/apps.txt.template sites/apps.txt
-  else
-    echo "⚠️ apps.txt template missing; creating minimal file."
-    cat > sites/apps.txt <<'EOF'
+# Always ensure apps metadata lists the apps bundled in this image
+cat > sites/apps.txt <<'EOF'
 frappe
 library_website_app
 EOF
-  fi
-fi
 
-if [[ ! -f sites/apps.json ]]; then
-  if [[ -f /home/frappe/apps.json.template ]]; then
-    cp /home/frappe/apps.json.template sites/apps.json
-  else
-    cat > sites/apps.json <<'EOF'
+cat > sites/apps.json <<'EOF'
 [
   "frappe",
   "library_website_app"
 ]
 EOF
-  fi
-fi
 
 echo "ℹ️ Using site: ${SITE_NAME}"
 echo "ℹ️ Database host: ${DB_HOST}:${DB_PORT}"
