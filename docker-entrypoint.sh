@@ -67,10 +67,17 @@ if [[ ! -f sites/assets/bundles.json && -d /home/frappe/prebuilt-assets ]]; then
   cp -a /home/frappe/prebuilt-assets/. sites/assets/
 fi
 
+# Ensure Vite-built assets are exposed under /assets/library_website_app without needing bench build
+if [[ ! -e sites/assets/library_website_app ]]; then
+  echo "ℹ️ Linking app public assets into sites/assets/library_website_app"
+  mkdir -p sites/assets
+  ln -s ../../apps/library_website_app/public sites/assets/library_website_app || true
+fi
+
 # If assets are still missing (no manifest), do a targeted build as a fallback
 if [[ ! -f sites/assets/bundles.json ]]; then
-  echo "ℹ️ Asset manifest missing; running a targeted build for frappe + library_website_app"
-  "${BENCH_BIN}" build --apps frappe library_website_app || true
+  echo "ℹ️ Asset manifest missing; running a targeted build for frappe"
+  "${BENCH_BIN}" build --apps frappe || true
 fi
 
 # Always ensure apps metadata lists the apps bundled in this image
