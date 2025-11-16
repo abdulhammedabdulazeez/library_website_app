@@ -64,6 +64,28 @@ If you need a specific upstream bench release, set `FRAPPE_BENCH_IMAGE` to one o
 
 The initial boot takes a few minutes (site creation + migrations). Subsequent restarts skip the heavy steps.
 
+## 4a. Persisting data and moving local data to Railway
+
+Frappe data lives in two places:
+
+- Database: MariaDB (Railway MariaDB plugin). Keep this service persistent.
+- Files and site config: the `sites/` directory (mounted Railway volume at `/home/frappe/library-bench/sites`).
+
+Avoid pointing local dev to the production Railway DB. Instead migrate data once:
+
+1) On local:
+- `bench --site <SITE_NAME> backup` (creates DB + files backup under `sites/<SITE_NAME>/private/backups`), or use `mysqldump`.
+- Copy files from `sites/<SITE_NAME>/private/files` and `sites/<SITE_NAME>/public/files`.
+- Note your `sites/<SITE_NAME>/site_config.json` (contains `encryption_key` and settings).
+
+2) On Railway:
+- Restore the DB into the MariaDB service (via client or CLI).
+- Place files into the app service volume at `/home/frappe/library-bench/sites/<SITE_NAME>/private/files` and `/home/frappe/library-bench/sites/<SITE_NAME>/public/files`.
+- Ensure `/home/frappe/library-bench/sites/<SITE_NAME>/site_config.json` exists and has correct DB credentials and the same `encryption_key`.
+- Restart the app service; the entrypoint will skip `new-site` and only run `migrate`.
+
+As long as you keep the same MariaDB service and the `sites` volume mounted at `/home/frappe/library-bench/sites`, data persists across deploys.
+
 ## 5. Add worker processes (optional)
 
 For background jobs, clone the Railway service and change the start command:

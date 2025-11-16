@@ -67,6 +67,12 @@ if [[ ! -f sites/assets/bundles.json && -d /home/frappe/prebuilt-assets ]]; then
   cp -a /home/frappe/prebuilt-assets/. sites/assets/
 fi
 
+# If assets are still missing (no manifest), do a targeted build as a fallback
+if [[ ! -f sites/assets/bundles.json ]]; then
+  echo "ℹ️ Asset manifest missing; running a targeted build for frappe + library_website_app"
+  "${BENCH_BIN}" build --apps frappe library_website_app || true
+fi
+
 # Always ensure apps metadata lists the apps bundled in this image
 cat > sites/apps.txt <<'EOF'
 frappe
