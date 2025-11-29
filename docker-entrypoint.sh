@@ -18,9 +18,34 @@ fi
 cd "${BENCH_PATH}"
 export PYTHONPATH="${BENCH_PATH}/apps:${PYTHONPATH:-}"
 
+# Function to log with timestamp
+log() {
+  echo "[$(date +'%Y-%m-%d %H:%M:%S')] $*"
+}
+
+# Function to wait for database to be ready
+wait_for_db() {
+  local max_attempts=30
+  local attempt=1
+  log "ℹ️ Waiting for database to be ready..."
+  
+  while [[ $attempt -le $max_attempts ]]; do
+    if mariadb --host "${DB_HOST}" --port "${DB_PORT}" --user "${DB_ROOT_USER}" --password="${DB_ROOT_PASSWORD}" -e "SELECT 1" &>/dev/null; then
+      log "✅ Database is ready!"
+      return 0
+    fi
+    log "⏳ Attempt $attempt/$max_attempts: Database not ready, waiting 2 seconds..."
+    sleep 2
+    ((attempt++))
+  done
+  
+  log "❌ Database failed to become ready after $max_attempts attempts"
+  return 1
+}
+
 SITE_NAME="${SITE_NAME:-${FRAPPE_SITE_NAME_HEADER:-}}"
 if [[ -z "${SITE_NAME}" ]]; then
-  echo "❌ SITE_NAME environment variable is required." >&2
+  log "❌ SITE_NAME environment variable is required." >&2
   exit 1
 fi
 
@@ -35,12 +60,12 @@ DB_PASSWORD="${DB_PASSWORD:-${MYSQLPASSWORD:-}}"
 ADMIN_PASSWORD="${ADMIN_PASSWORD:-admin}"
 
 if [[ -z "${DB_HOST}" ]]; then
-  echo "❌ DB_HOST (or MYSQLHOST) must be provided." >&2
+  log "❌ DB_HOST (or MYSQLHOST) must be provided." >&2
   exit 1
 fi
 
 if [[ -z "${DB_ROOT_PASSWORD}" ]]; then
-  echo "❌ DB_ROOT_PASSWORD (or MYSQLPASSWORD) must be provided with create-database privileges." >&2
+  log "❌ DB_ROOT_PASSWORD (or MYSQLPASSWORD) must be provided with create-database privileges." >&2
   exit 1
 fi
 
@@ -53,15 +78,21 @@ REDIS_QUEUE="${REDIS_QUEUE:-${REDIS_URL:-}}"
 REDIS_SOCKETIO="${REDIS_SOCKETIO:-${REDIS_URL:-}}"
 
 if [[ -z "${REDIS_CACHE}" || -z "${REDIS_QUEUE}" || -z "${REDIS_SOCKETIO}" ]]; then
-  echo "❌ Redis URLs are required. Provide REDIS_CACHE/QUEUE/SOCKETIO or REDIS_URL." >&2
+  log "❌ Redis URLs are required. Provide REDIS_CACHE/QUEUE/SOCKETIO or REDIS_URL." >&2
   exit 1
 fi
 
 mkdir -p sites
 
+# Wait for database to be ready before proceeding
+wait_for_db || {
+  log "❌ Failed to connect to database. Exiting."
+  exit 1
+}
+
 # Restore prebuilt asset bundles if the mounted volume is empty
 if [[ ! -f sites/assets/bundles.json && -d /home/frappe/prebuilt-assets ]]; then
-  echo "ℹ️ Restoring prebuilt assets into sites/assets"
+  log "ℹ️ Restoring prebuilt assets into sites/assets"
   rm -rf sites/assets
   mkdir -p sites/assets
   cp -a /home/frappe/prebuilt-assets/. sites/assets/
@@ -69,14 +100,14 @@ fi
 
 # Ensure Vite-built assets are exposed under /assets/library_website_app without needing bench build
 if [[ ! -e sites/assets/library_website_app ]]; then
-  echo "ℹ️ Linking app public assets into sites/assets/library_website_app"
+  log "ℹ️ Linking app public assets into sites/assets/library_website_app"
   mkdir -p sites/assets
   ln -s ../../apps/library_website_app/public sites/assets/library_website_app || true
 fi
 
 # If assets are still missing (no manifest), do a targeted build as a fallback
 if [[ ! -f sites/assets/bundles.json ]]; then
-  echo "ℹ️ Asset manifest missing; running a targeted build for frappe"
+  log "ℹ️ Asset manifest missing; running a targeted build for frappe"
   "${BENCH_BIN}" build --apps frappe || true
 fi
 
@@ -93,9 +124,9 @@ cat > sites/apps.json <<'EOF'
 ]
 EOF
 
-echo "ℹ️ Using site: ${SITE_NAME}"
-echo "ℹ️ Database host: ${DB_HOST}:${DB_PORT}"
-echo "ℹ️ Redis cache: ${REDIS_CACHE}"
+log "ℹ️ Using site: ${SITE_NAME}"
+log "ℹ️ Database host: ${DB_HOST}:${DB_PORT}"
+log "ℹ️ Redis cache: ${REDIS_CACHE}"
 
 python - <<PY
 import json
@@ -124,8 +155,8 @@ config_path.write_text(json.dumps(config, indent=2))
 PY
 
 if [[ ! -d "sites/${SITE_NAME}" ]]; then
-  echo "➡️ Creating new site ${SITE_NAME}"
-  "${BENCH_BIN}" new-site "${SITE_NAME}" \
+  log "➡️ Creating new site ${SITE_NAME}"
+  if ! "${BENCH_BIN}" new-site "${SITE_NAME}" \
     --db-type mariadb \
     --db-host "${DB_HOST}" \
     --db-port "${DB_PORT}" \
@@ -136,18 +167,30 @@ if [[ ! -d "sites/${SITE_NAME}" ]]; then
     --admin-password "${ADMIN_PASSWORD}" \
     --no-mariadb-socket \
     --install-app library_website_app \
-    --set-default
+    --set-default; then
+    log "❌ Failed to create site ${SITE_NAME}"
+    exit 1
+  fi
+  log "✅ Site ${SITE_NAME} created successfully"
 else
-  echo "✅ Site ${SITE_NAME} already exists."
+  log "✅ Site ${SITE_NAME} already exists."
 fi
 
-if ! "${BENCH_BIN}" --site "${SITE_NAME}" list-apps | grep -q "^library_website_app$"; then
-  echo "➡️ Installing library_website_app on ${SITE_NAME}"
-  "${BENCH_BIN}" --site "${SITE_NAME}" install-app library_website_app
+if ! "${BENCH_BIN}" --site "${SITE_NAME}" list-apps 2>/dev/null | grep -q "^library_website_app$"; then
+  log "➡️ Installing library_website_app on ${SITE_NAME}"
+  if ! "${BENCH_BIN}" --site "${SITE_NAME}" install-app library_website_app; then
+    log "❌ Failed to install library_website_app"
+    exit 1
+  fi
+  log "✅ library_website_app installed successfully"
 fi
 
-echo "➡️ Running migrations for ${SITE_NAME}"
-"${BENCH_BIN}" --site "${SITE_NAME}" migrate
+log "➡️ Running migrations for ${SITE_NAME}"
+if ! "${BENCH_BIN}" --site "${SITE_NAME}" migrate; then
+  log "❌ Failed to run migrations"
+  exit 1
+fi
+log "✅ Migrations completed"
 
 "${BENCH_BIN}" use "${SITE_NAME}"
 
@@ -156,26 +199,35 @@ shift || true
 
 case "${COMMAND}" in
   web)
+    log "🚀 Starting Frappe web server on port ${PORT}..."
+    log "ℹ️ Server will bind to 0.0.0.0:${PORT} to accept external connections"
+    # bench serve already binds to 0.0.0.0 by default
     exec "${BENCH_BIN}" --site "${SITE_NAME}" serve \
       --port "${PORT}" \
       --noreload
     ;;
   socketio)
+    log "🚀 Starting Socket.IO server..."
     exec node apps/frappe/socketio.js
     ;;
   schedule)
+    log "🚀 Starting scheduler..."
     exec "${BENCH_BIN}" --site "${SITE_NAME}" schedule
     ;;
   worker-short)
+    log "🚀 Starting short queue worker..."
     exec "${BENCH_BIN}" --site "${SITE_NAME}" worker --queue short
     ;;
   worker-default)
+    log "🚀 Starting default queue worker..."
     exec "${BENCH_BIN}" --site "${SITE_NAME}" worker --queue default
     ;;
   worker-long)
+    log "🚀 Starting long queue worker..."
     exec "${BENCH_BIN}" --site "${SITE_NAME}" worker --queue long
     ;;
   *)
+    log "🚀 Running custom command: ${COMMAND}"
     exec "${BENCH_BIN}" --site "${SITE_NAME}" "$COMMAND" "$@"
     ;;
 esac
