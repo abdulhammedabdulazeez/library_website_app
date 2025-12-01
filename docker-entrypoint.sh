@@ -43,6 +43,75 @@ wait_for_db() {
   return 1
 }
 
+# Function to wait for Redis to be ready
+wait_for_redis() {
+  local max_attempts=30
+  local attempt=1
+  log "ℹ️ Waiting for Redis to be ready..."
+  
+  # Use REDIS_CACHE URL for the check
+  local redis_url="${REDIS_CACHE:-${REDIS_URL:-}}"
+  if [[ -z "${redis_url}" ]]; then
+    log "⚠️ No Redis URL provided, skipping Redis check"
+    return 0
+  fi
+  
+  # Parse Redis URL (format: redis://[password@]host:port or redis://host:port)
+  local redis_host
+  local redis_port
+  
+  if [[ "${redis_url}" =~ redis://.*@([^:]+):([0-9]+) ]]; then
+    # Format: redis://password@host:port
+    redis_host="${BASH_REMATCH[1]}"
+    redis_port="${BASH_REMATCH[2]}"
+  elif [[ "${redis_url}" =~ redis://([^:]+):([0-9]+) ]]; then
+    # Format: redis://host:port
+    redis_host="${BASH_REMATCH[1]}"
+    redis_port="${BASH_REMATCH[2]}"
+  else
+    log "⚠️ Could not parse Redis URL: ${redis_url}, skipping check"
+    return 0
+  fi
+  
+  log "ℹ️ Checking Redis at ${redis_host}:${redis_port}"
+  
+  while [[ $attempt -le $max_attempts ]]; do
+    # Try multiple methods to check Redis connectivity
+    local redis_ready=false
+    
+    # Method 1: Try using Python socket (most reliable)
+    if python3 -c "
+import socket
+import sys
+try:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(2)
+    result = sock.connect_ex(('${redis_host}', ${redis_port}))
+    sock.close()
+    sys.exit(0 if result == 0 else 1)
+except Exception:
+    sys.exit(1)
+" 2>/dev/null; then
+      redis_ready=true
+    # Method 2: Fallback to bash TCP check
+    elif timeout 2 bash -c "echo > /dev/tcp/${redis_host}/${redis_port}" 2>/dev/null; then
+      redis_ready=true
+    fi
+    
+    if [[ "${redis_ready}" == "true" ]]; then
+      log "✅ Redis is ready!"
+      return 0
+    fi
+    
+    log "⏳ Attempt $attempt/$max_attempts: Redis not ready, waiting 2 seconds..."
+    sleep 2
+    ((attempt++))
+  done
+  
+  log "⚠️ Redis check failed after $max_attempts attempts, but continuing (may work during migration)"
+  return 0  # Don't fail, just warn - migration might still work
+}
+
 SITE_NAME="${SITE_NAME:-${FRAPPE_SITE_NAME_HEADER:-}}"
 if [[ -z "${SITE_NAME}" ]]; then
   log "❌ SITE_NAME environment variable is required." >&2
@@ -184,6 +253,9 @@ if ! "${BENCH_BIN}" --site "${SITE_NAME}" list-apps 2>/dev/null | grep -q "^libr
   fi
   log "✅ library_website_app installed successfully"
 fi
+
+# Wait for Redis before migration (helps with service check)
+wait_for_redis
 
 log "➡️ Running migrations for ${SITE_NAME}"
 if ! "${BENCH_BIN}" --site "${SITE_NAME}" migrate; then
