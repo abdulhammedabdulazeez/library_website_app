@@ -6,8 +6,9 @@ import { Footer } from "@/components/Footer";
 export const Root = () => {
   const getSiteName = () => {
     const frappeWindow = window as any;
+    // Wait for frappe to be available, with fallback
     if (
-      frappeWindow.frappe?.boot?.versions.frappe &&
+      frappeWindow.frappe?.boot?.versions?.frappe &&
       (frappeWindow.frappe.boot.versions.frappe.startsWith("15") ||
         frappeWindow.frappe.boot.versions.frappe.startsWith("16"))
     ) {
@@ -15,7 +16,7 @@ export const Root = () => {
         frappeWindow.frappe?.boot?.sitename ?? import.meta.env.VITE_SITE_NAME
       );
     }
-    return import.meta.env.VITE_SITE_NAME;
+    return import.meta.env.VITE_SITE_NAME ?? "library.railway.app";
   };
   return (
     <FrappeProvider

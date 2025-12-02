@@ -8,7 +8,7 @@
     "build": "vite build --base=/assets/library_website_app/library/ && npm run copy-html-entry",
     "lint": "eslint .",
     "preview": "vite preview",
-    "copy-html-entry": "shx mkdir -p ../library_website_app/www && sed 's|<head>|<head>\\n    <script src=\"/assets/frappe/dist/js/frappe-web.bundle.js\"></script>|' ../library_website_app/public/library/index.html > ../library_website_app/www/library.html"
+    "copy-html-entry": "shx mkdir -p ../library_website_app/www && node update-template.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
