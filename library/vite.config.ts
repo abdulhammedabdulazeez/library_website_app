@@ -25,7 +25,6 @@ export default defineConfig(({ mode }) => {
       outDir: "../library_website_app/public/library",
       emptyOutDir: true,
       target: "es2015",
-      manifest: true, // Generate manifest.json for asset mapping
     },
   };
 });
